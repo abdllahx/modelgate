@@ -1,0 +1,14 @@
+{
+  "name": "abdllahx",
+  "owner": {
+    "name": "Muhammad Abdullah",
+    "url": "https://github.com/abdllahx"
+  },
+  "plugins": [
+    {
+      "name": "modelgate",
+      "source": "./",
+      "description": "Receipt extraction with multi-vendor fallback, silent-failure checks and budget guardrails."
+    }
+  ]
+}

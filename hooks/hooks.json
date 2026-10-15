@@ -1,0 +1,29 @@
+{
+  "description": "ModelGate guardrails for plugin users: block extraction once the monthly budget is spent, and log tool calls for adoption reporting.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__.*modelgate.*__extract_receipt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/budget-guard.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__.*modelgate.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/log-adoption.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

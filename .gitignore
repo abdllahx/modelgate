@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.next/
+.turbo/
+.modelgate/
+.env
+.env.*
+!.env.example
+packages/eval/results/
+*.tsbuildinfo
+*.log
+.DS_Store

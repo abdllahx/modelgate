@@ -1,0 +1,20 @@
+{
+  "name": "@modelgate/eval",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dataset": "tsx --conditions=source src/generate-dataset.ts",
+    "eval": "tsx --conditions=source src/run.ts",
+    "gate": "tsx --conditions=source src/gate.ts",
+    "typecheck": "tsc --noEmit",
+    "test:agent": "tsx --conditions=source scripts/agent-e2e.ts"
+  },
+  "dependencies": {
+    "@modelgate/core": "*"
+  },
+  "devDependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.300",
+    "sharp": "^0.35.5"
+  }
+}

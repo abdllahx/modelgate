@@ -1,0 +1,12 @@
+{
+  "name": "modelgate",
+  "version": "0.1.0",
+  "description": "Receipt extraction for Claude Code: routes vision calls across Claude, GPT and Gemini with retries, fallback, silent-failure checks and a monthly budget guard.",
+  "author": {
+    "name": "Muhammad Abdullah",
+    "url": "https://github.com/abdllahx"
+  },
+  "repository": "https://github.com/abdllahx/modelgate",
+  "license": "MIT",
+  "keywords": ["mcp", "vision", "evals", "fallback", "finops"]
+}

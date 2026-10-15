@@ -1,0 +1,46 @@
+# AI code review policy. CodeRabbit reviews every pull request; these path
+# instructions encode the rules in CLAUDE.md so human and AI reviewers check the same things.
+language: en-US
+reviews:
+  profile: assertive
+  request_changes_workflow: true
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: "packages/core/prompts/**"
+      instructions: >-
+        Every prompt edit must bump `version` in the front matter and ship with
+        packages/eval/baseline.json updated in the same PR via `npm run eval:baseline`.
+        Flag examples copied from packages/eval/dataset: they make the eval measure memorisation.
+    - path: "packages/core/src/providers/**"
+      instructions: >-
+        SDK clients must disable their own retries. Requests must pass the abort
+        signal. Errors must be classified with the SDK's typed error classes into
+        VendorError kinds; flag string matching on messages unless a comment explains
+        why no typed signal exists. Providers must not parse or validate JSON.
+    - path: "apps/mcp/src/**"
+      instructions: >-
+        Server code must never write to stdout (it is the MCP channel).
+    - path: "{packages,apps}/*/src/**"
+      instructions: >-
+        Flag any new failure path that is not covered by a test in that workspace's test/ folder.
+    - path: "apps/api/src/**"
+      instructions: >-
+        Every error a client can act on needs a specific status code and JSON body.
+        /v1 routes must stay behind bearer auth; nothing may log request bodies (they contain images).
+    - path: "apps/web/**"
+      instructions: >-
+        MODELGATE_API_TOKEN must only be read in server code (server actions, server
+        components, lib/api.ts). Flag any use in a "use client" file.
+    - path: "packages/db/src/schema.ts"
+      instructions: >-
+        Schema changes need a generated migration in packages/db/migrations in the same PR.
+    - path: "packages/core/src/pricing.ts"
+      instructions: >-
+        Any changed price row must update the verification date and source comment.
+    - path: "packages/eval/baseline.json"
+      instructions: >-
+        Check that the PR also changes prompts or providers and that the eval gate
+        job passed. A baseline change on its own is a red flag.

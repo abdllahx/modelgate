@@ -1,0 +1,39 @@
+{
+  "name": "modelgate",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Routes vision extraction across LLM vendors with evals, fallback, silent-failure detection and cost control. MCP server and Claude Code plugin, Express API on Render, Next.js app on Vercel.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Muhammad Abdullah",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "npm@11.12.1",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "vitest run",
+    "dev": "turbo run dev",
+    "dataset": "npm run dataset -w @modelgate/eval --",
+    "eval": "npm run eval -w @modelgate/eval --",
+    "eval:gate": "npm run gate -w @modelgate/eval --",
+    "eval:baseline": "npm run gate -w @modelgate/eval -- --promote",
+    "db:generate": "npm run generate -w @modelgate/db",
+    "report": "tsx --conditions=source scripts/report.ts",
+    "check:plugin": "tsx scripts/check-plugin.ts",
+    "smoke": "npm run smoke -w @modelgate/mcp",
+    "test:agent": "npm run test:agent -w @modelgate/eval"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "turbo": "^2.11.8",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.4"
+  }
+}

@@ -1,0 +1,50 @@
+name: Eval gate
+
+# Prompt or provider changes re-run the vendor eval and fail the pull request
+# when accuracy, valid-output rate or cost regress beyond eval/gate.ts thresholds.
+on:
+  pull_request:
+    paths:
+      - "packages/core/prompts/**"
+      - "packages/core/src/providers/**"
+      - "packages/core/src/schema.ts"
+      - "packages/core/src/validate.ts"
+
+concurrency:
+  group: eval-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Skip when no vendor keys are configured
+        id: keys
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY$OPENAI_API_KEY$GEMINI_API_KEY" ]; then
+            echo "No vendor secrets configured; skipping the paid eval." >> "$GITHUB_STEP_SUMMARY"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Run eval (capped at $3)
+        if: steps.keys.outputs.run == 'true'
+        run: npm run eval -- --no-routed --max-usd 3 --markdown none
+      - name: Compare against baseline
+        if: steps.keys.outputs.run == 'true'
+        run: npm run eval:gate
+      - name: Publish results
+        if: always() && steps.keys.outputs.run == 'true'
+        run: |
+          node -e 'const r = require("./packages/eval/results/latest.json"); for (const c of r.candidates) console.log(`| ${c.id} | ${(c.fieldAccuracy*100).toFixed(1)}% | ${(c.validRate*100).toFixed(1)}% | $${c.costPer1kDocsUsd.toFixed(2)} |`)' > rows.md
+          { echo "| Candidate | Field accuracy | Valid output | Cost / 1k docs |"; echo "|---|---|---|---|"; cat rows.md; } >> "$GITHUB_STEP_SUMMARY"

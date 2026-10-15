@@ -1,0 +1,19 @@
+{
+  "name": "@modelgate/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsx --conditions=source src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "smoke": "tsx --conditions=source scripts/smoke.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "@modelgate/core": "*",
+    "@modelgate/db": "*",
+    "zod": "^4.6.7"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "modelgate": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT:-.}/bin/modelgate.mjs"],
+      "env": {
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY:-}",
+        "OPENAI_API_KEY": "${OPENAI_API_KEY:-}",
+        "GEMINI_API_KEY": "${GEMINI_API_KEY:-}",
+        "MODELGATE_VENDORS": "${MODELGATE_VENDORS:-}",
+        "MODELGATE_BUDGET_USD": "${MODELGATE_BUDGET_USD:-5}",
+        "MODELGATE_ALERT_WEBHOOK": "${MODELGATE_ALERT_WEBHOOK:-}",
+        "MODELGATE_HOME": "${MODELGATE_HOME:-}"
+      }
+    }
+  }
+}
