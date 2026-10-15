@@ -170,6 +170,18 @@ Defaults: `claude-opus-5-5` (effort `medium`), `gpt-5-mini`, `gemini-2.5-flash`.
 - The dataset is synthetic. Current Claude models already read all of it, so it now works mainly as a regression and vendor-comparison check. Real receipts (crumples, handwriting, glare, multi-page invoices) belong in it before production use, and repeated runs per document would quantify the run-to-run variance seen on skewed receipts.
 - A wrong line item with correct totals passes validation as a warning, not a failure. Stricter item checks would trade false rejections for fewer silent errors.
 
+## How this was built
+
+I built ModelGate with Claude Code as my implementation assistant. I set the scope and requirements and made the product and stack decisions:
+- one small project focused on production AI reliability and agent tooling, not a broad toolkit;
+- Turborepo, with Next.js on Vercel, Express on Render and Drizzle on Postgres;
+- testing against real Claude models through the Claude Agent SDK when no API key was available;
+- how and where it is published.
+
+Claude Code proposed designs for my approval, wrote most of the code, and ran the checks. I reviewed and approved the plan at each stage, and pushed for verification beyond unit tests. That push is what produced the SDK contract tests, the cold-install smoke test, the real-agent plugin test and the harder eval dataset, and those surfaced the bugs listed in the commit history and limitations above.
+
+Every number in this README comes from a test or an eval run in this repo.
+
 ## License
 
 MIT
